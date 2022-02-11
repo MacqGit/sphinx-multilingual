@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+sphinx_multilingual/__init__.py
+sphinx_multilingual.egg-info/PKG-INFO
+sphinx_multilingual.egg-info/SOURCES.txt
+sphinx_multilingual.egg-info/dependency_links.txt
+sphinx_multilingual.egg-info/requires.txt
+sphinx_multilingual.egg-info/top_level.txt
