@@ -5,7 +5,7 @@ from setuptools import setup
 from pathlib import Path
 
 lines = Path("sphinx_multilingual").joinpath("__init__.py")
-for line in lines.read_text().split("\n"):
+for line in lines.read_text(encoding='utf-8').split("\n"):
     if line.startswith("__version__ ="):
         version = line.split(" = ")[-1].strip('"')
         break
@@ -23,7 +23,7 @@ setup(
     # this should be a whitespace separated string of keywords, not a list
     keywords="multilingual documentation",
     description="An extension to manage multilingual documentation generation with Sphinx",
-    long_description=Path("./README.md").read_text(),
+    long_description=Path("./README.md").read_text(encoding='utf-8'),
     long_description_content_type="text/markdown",
     license="MIT",
     packages=['sphinx_multilingual'],
