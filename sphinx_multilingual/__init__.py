@@ -5,7 +5,7 @@ import re
 
 # from typing import TYPE_CHECKING
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __credits__ = 'Odoo'
 
 SPHINX_LOGGER = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ def _generate_alternate_urls(app, pagename, templatename, context, doctree):
         """
         # If the canonical version is not set, assume that the project has a single version
         _canonical_version = app.config.canonical_version or app.config.version
-        _canonical_lang = 'en'  # Always 'en'. Don't take the value of the config option.
+        _canonical_lang = app.config.canonical_language or "en"
         context['canonical'] = _build_url(_version=_canonical_version, _lang=_canonical_lang)
 
     def _versionize():
@@ -85,6 +85,7 @@ def _generate_alternate_urls(app, pagename, templatename, context, doctree):
             _root = re.sub(rf'(/{app.config.version})?(/{app.config.language})?$', '', app.outdir)
         # If the canonical version is not set, assume that the project has a single version
         _canonical_version = app.config.canonical_version or app.config.version
+        _canonical_language = app.config.canonical_language or 'en'
         _version = _version or app.config.version
         _lang = _lang or app.config.language or 'en'
         _canonical_page = f'{pagename}.html'
@@ -92,7 +93,7 @@ def _generate_alternate_urls(app, pagename, templatename, context, doctree):
             _canonical_page = _canonical_page.replace('index.html', '')
         return f'{_root}' \
                f'{f"/{_version}" if app.config.versions else ""}' \
-               f'{f"/{_lang}" if _lang != "en" else ""}' \
+               f'{f"/{_lang}" if _lang != _canonical_language else ""}' \
                f'/{_canonical_page}'
 
     _canonicalize()
@@ -114,6 +115,7 @@ def setup(app: "Sphinx") -> dict:
     
     app.add_config_value('project_root', None, 'env')
     app.add_config_value('canonical_version', None, 'env')
+    app.add_config_value('canonical_language', None, 'env')
     app.add_config_value('versions', None, 'env')
     app.add_config_value('languages', None, 'env')
     app.add_config_value('is_remote_build', None, 'env')  # Whether the build is remotely deployed
