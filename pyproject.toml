@@ -1,3 +1,14 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "sphinx-multilingual"
+version = "0.0.2"
+description = "A sphinx extension helper to enable use of Languages & Versions theme selectors."
+readme = "README.md"
+keywords = ["sphinx","extension"]
+requires-python = "~=3.7"
+dependencies = [
+    "sphinx>=4,<7",
+]

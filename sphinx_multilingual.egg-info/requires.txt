@@ -1,4 +1,0 @@
-sphinx<5,>=3
-
-[sphinx]
-sphinx~=4.4

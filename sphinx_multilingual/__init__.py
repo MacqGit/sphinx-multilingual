@@ -2,6 +2,7 @@
 
 import logging
 import re
+from apt.cache import _test
 
 # from typing import TYPE_CHECKING
 
@@ -43,15 +44,16 @@ def _generate_alternate_urls(app, pagename, templatename, context, doctree):
 
         The entry 'version' is added by Sphinx in the rendering context.
         """
+        context['version_display_name'] = app.config.versions_names.get(app.config.version)
         # If the list of versions is not set, assume that the project has no alternate version
-        _alternate_versions = app.config.versions and app.config.versions.split(',') or []
-        context['alternate_versions'] = [
-            (_alternate_version, _build_url(_version=_alternate_version))
-            for _alternate_version in sorted(_alternate_versions, reverse=True)
-            if _alternate_version != version and (
-                _alternate_version != 'master' or pagename.startswith('developer')
-            )
-        ]
+        _provided_versions = app.config.versions and app.config.versions.split(',') or []
+              # Map alternate versions to their display names and URLs.
+        context['alternate_versions'] = []
+        for _alternate_version, _display_name in app.config.versions_names.items():
+            if _alternate_version in _provided_versions and _alternate_version != app.config.version:
+                context['alternate_versions'].append(
+                    (_display_name, _build_url(_alternate_version))
+                )
 
     def _localize():
         """ Add the pairs of (lang, code, url) for the current document in the rendering context.
@@ -111,8 +113,13 @@ def setup(app: "Sphinx") -> dict:
     'pt_BR': 'Português (BR)',
     'uk': 'українська',
     'zh_CN': '简体中文',
-}
-    
+    }
+
+    _versions_names = {
+    'A': "Class A",
+    'C': "Class C",
+    }
+
     app.add_config_value('project_root', None, 'env')
     app.add_config_value('canonical_version', None, 'env')
     app.add_config_value('canonical_language', None, 'env')
@@ -120,6 +127,7 @@ def setup(app: "Sphinx") -> dict:
     app.add_config_value('languages', None, 'env')
     app.add_config_value('is_remote_build', None, 'env')  # Whether the build is remotely deployed
     app.add_config_value('supported_languages', _supported_languages, 'env')
+    app.add_config_value('versions_names', _versions_names, 'env')
     
     app.connect('html-page-context', _generate_alternate_urls)
 
