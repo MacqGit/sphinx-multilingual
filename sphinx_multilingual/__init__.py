@@ -2,7 +2,6 @@
 
 import logging
 import re
-from apt.cache import _test
 
 # from typing import TYPE_CHECKING
 
